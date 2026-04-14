@@ -1,0 +1,23 @@
+{
+  "env": {
+    "ANTHROPIC_AUTH_TOKEN": "26c85c4ef3d242e9aa455e91a85c23ae.4LcjjsENwSCewSdm",
+    "ANTHROPIC_BASE_URL": "https://open.bigmodel.cn/api/anthropic",
+    "API_TIMEOUT_MS": "3000000",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "glm-5.1",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "glm-5.1",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "glm-4.5-air"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(cd:e:/ai/japanese-subtitle-app && *:*)",
+      "Bash(cd:e:/ai/japanese-subtitle-app && gradle:*)",
+      "Bash(git:*)",
+      "Read(//e/ai/japanese-subtitle-app/**)",
+      "Write(//e/ai/japanese-subtitle-app/**)",
+      "Edit(//e/ai/japanese-subtitle-app/**)",
+      "Bash(mkdir:e:/ai/**)",
+      "WebSearch"
+    ]
+  }
+}

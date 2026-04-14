@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">日语字幕通</string>
+    <string name="title_settings">设置</string>
+    <string name="title_history">字幕历史</string>
+
+    <!-- MainActivity -->
+    <string name="btn_start_subtitle">开始字幕</string>
+    <string name="btn_stop_subtitle">停止字幕</string>
+    <string name="status_ready">就绪</string>
+    <string name="status_running">字幕运行中</string>
+    <string name="status_stopped">已停止</string>
+
+    <!-- Permissions -->
+    <string name="permission_overlay_title">需要悬浮窗权限</string>
+    <string name="permission_overlay_message">请在设置中允许「日语字幕通」显示悬浮窗</string>
+    <string name="permission_audio_title">需要录音权限</string>
+    <string name="permission_audio_message">需要录音权限来捕获音频进行语音识别</string>
+    <string name="permission_notification_title">需要通知权限</string>
+    <string name="permission_notification_message">需要通知权限来保持字幕服务运行</string>
+
+    <!-- Notification -->
+    <string name="notification_channel_name">字幕服务</string>
+    <string name="notification_title">日语字幕通运行中</string>
+    <string name="notification_text">正在实时翻译日语字幕</string>
+    <string name="notification_stop">停止</string>
+
+    <!-- Overlay -->
+    <string name="overlay_initializing">正在初始化…</string>
+    <string name="overlay_listening">正在聆听…</string>
+
+    <!-- Settings -->
+    <string name="settings_model">识别模型</string>
+    <string name="settings_model_tiny">Tiny (快速, 75MB)</string>
+    <string name="settings_model_base">Base (精准, 150MB)</string>
+    <string name="settings_font_size">字幕字号</string>
+    <string name="settings_overlay_position">字幕位置</string>
+    <string name="settings_overlay_top">顶部</string>
+    <string name="settings_overlay_bottom">底部</string>
+    <string name="settings_baidu_appid">百度翻译 App ID</string>
+    <string name="settings_baidu_key">百度翻译密钥</string>
+    <string name="settings_save">保存设置</string>
+</resources>

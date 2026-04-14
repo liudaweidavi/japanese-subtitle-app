@@ -1,0 +1,40 @@
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Kotlin
+*.class
+
+# Android build outputs
+/app/build
+*.apk
+*.aab
+*.ap_
+
+# Native build intermediates
+*.o
+*.so
+*.a
+
+# Whisper.cpp source (cloned separately)
+/whisper.cpp/
+
+# Whisper model files (too large for git)
+*.bin
+*.gguf
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db

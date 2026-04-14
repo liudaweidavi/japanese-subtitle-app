@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Subtitle bar background -->
+    <path
+        android:fillColor="#E0000000"
+        android:pathData="M24,62h60v24H24z"/>
+    <!-- Japanese text "日" (sun) as icon -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M44,38h20v20H44z"/>
+    <path
+        android:fillColor="#3700B3"
+        android:pathData="M47,41h14v14H47z"/>
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M53,38h2v20h-2z"/>
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M44,47h20v2H44z"/>
+    <!-- Subtitle text lines -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M30,67h30v3H30z"/>
+    <path
+        android:fillColor="#BBFFFFFF"
+        android:pathData="M30,73h22v3H30z"/>
+    <path
+        android:fillColor="#88FFFFFF"
+        android:pathData="M30,79h16v3H30z"/>
+</vector>

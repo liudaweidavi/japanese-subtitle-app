@@ -62,19 +62,41 @@ class SubtitlePipeline(private val context: Context) {
         repository = SubtitleRepository(dao)
         sessionId = UUID.randomUUID().toString()
 
-        // Initialize whisper
+        // Prepare model (copy from assets if needed) with progress
         val engine = WhisperEngine(context)
         val config = WhisperConfig(
             modelPath = Constants.MODEL_FILE_TINY,
             language = Constants.WHISPER_LANGUAGE,
             nThreads = Constants.WHISPER_N_THREADS
         )
-        if (!engine.initialize(config)) {
-            Log.e(TAG, "Failed to initialize Whisper engine")
+
+        val modelReady = engine.prepareModel(config) { percent ->
+            if (percent < 100) {
+                scope.launch(Dispatchers.Main) {
+                    overlayManager?.updateText("正在准备模型 $percent%…")
+                }
+            }
+        }
+        if (!modelReady) {
+            Log.e(TAG, "Failed to prepare model")
+            _state.value = PipelineState.ERROR
+            return false
+        }
+
+        scope.launch(Dispatchers.Main) {
+            overlayManager?.updateText("正在加载模型…")
+        }
+
+        if (!engine.loadModel(config)) {
+            Log.e(TAG, "Failed to load whisper model")
             _state.value = PipelineState.ERROR
             return false
         }
         whisperEngine = engine
+
+        scope.launch(Dispatchers.Main) {
+            overlayManager?.updateText("正在聆听…")
+        }
 
         // Start audio capture
         audioCapture = AudioCaptureManager(context)

@@ -147,10 +147,9 @@ class SubtitlePipeline(private val context: Context) {
 
         Log.d(TAG, "ASR: $japaneseText")
 
-        // Step 2: Translation (Japanese to Chinese)
-        _state.value = PipelineState.PROCESSING_TRANSLATION
-        val translationResult = translator?.translate(japaneseText)
-        val displayText = translationResult?.translatedText ?: japaneseText
+        // Step 2: Direct display (skip translation for testing)
+        val displayText = japaneseText
+        Log.d(TAG, "Display: $displayText")
 
         Log.d(TAG, "Translation: $displayText")
 

@@ -21,8 +21,8 @@ class UserPreferences(private val context: Context) {
         val KEY_OVERLAY_POSITION = stringPreferencesKey("overlay_position")
     }
 
-    val baiduAppId: Flow<String> = context.dataStore.data.map { it[KEY_BAIDU_APP_ID] ?: "" }
-    val baiduSecretKey: Flow<String> = context.dataStore.data.map { it[KEY_BAIDU_SECRET_KEY] ?: "" }
+    val baiduAppId: Flow<String> = context.dataStore.data.map { it[KEY_BAIDU_APP_ID] ?: "20260415002595152" }
+    val baiduSecretKey: Flow<String> = context.dataStore.data.map { it[KEY_BAIDU_SECRET_KEY] ?: "xxDYJjhl9WUkVwR6eAm3" }
     val modelName: Flow<String> = context.dataStore.data.map { it[KEY_MODEL_NAME] ?: "ggml-tiny.bin" }
     val fontSize: Flow<String> = context.dataStore.data.map { it[KEY_FONT_SIZE] ?: "18" }
     val overlayPosition: Flow<String> = context.dataStore.data.map { it[KEY_OVERLAY_POSITION] ?: "bottom" }

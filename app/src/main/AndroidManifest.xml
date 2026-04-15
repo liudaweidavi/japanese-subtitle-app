@@ -9,6 +9,7 @@
     <!-- Foreground service -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
 
     <!-- Floating overlay -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -52,7 +53,8 @@
         <service
             android:name=".service.SubtitleOverlayService"
             android:exported="false"
-            android:foregroundServiceType="mediaProjection" />
+            android:foregroundServiceType="mediaProjection"
+            android:permission="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
 
     </application>
 </manifest>

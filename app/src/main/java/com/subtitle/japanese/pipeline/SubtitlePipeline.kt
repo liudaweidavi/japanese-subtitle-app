@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.UUID
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Core orchestrator: audio capture → ASR → translation → overlay display.
@@ -38,6 +39,8 @@ class SubtitlePipeline(private val context: Context) {
     private var overlayManager: OverlayManager? = null
     private var repository: SubtitleRepository? = null
     private var sessionId: String = ""
+
+    private val isProcessing = AtomicBoolean(false)
 
     private var pipelineJob: Job? = null
     private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
@@ -88,50 +91,70 @@ class SubtitlePipeline(private val context: Context) {
             audioCapture!!.audioData.collect { pcmData ->
                 audioBuffer.write(pcmData, 0, pcmData.size)
 
-                if (audioBuffer.hasEnoughData()) {
-                    val samples = audioBuffer.extractWindow() ?: return@collect
-
-                    // Step 1: ASR (Japanese speech to text)
-                    _state.value = PipelineState.PROCESSING_ASR
-                    val whisperResult = whisperEngine?.transcribe(samples)
-                    val japaneseText = whisperResult?.text?.trim()
-
-                    if (japaneseText.isNullOrBlank()) {
-                        _state.value = PipelineState.CAPTURING
+                // Skip if previous inference still running — drop audio to stay real-time
+                if (audioBuffer.hasEnoughData() && isProcessing.compareAndSet(false, true)) {
+                    val samples = audioBuffer.extractWindow() ?: run {
+                        isProcessing.set(false)
                         return@collect
                     }
 
-                    Log.d(TAG, "ASR: $japaneseText")
-
-                    // Step 2: Translation (Japanese to Chinese)
-                    _state.value = PipelineState.PROCESSING_TRANSLATION
-                    val translationResult = translator?.translate(japaneseText)
-                    val displayText = translationResult?.translatedText ?: japaneseText
-
-                    Log.d(TAG, "Translation: $displayText")
-
-                    // Save to database
-                    repository?.insert(
-                        SubtitleEntry(
-                            sourceText = japaneseText,
-                            translatedText = displayText,
-                            sessionId = sessionId
-                        )
-                    )
-
-                    // Step 3: Display on overlay
-                    _state.value = PipelineState.DISPLAYING
-                    _subtitleText.value = displayText
-                    withContext(Dispatchers.Main) {
-                        overlayManager?.updateText(displayText)
+                    launch {
+                        try {
+                            processAudio(samples)
+                        } finally {
+                            isProcessing.set(false)
+                        }
                     }
-
-                    _state.value = PipelineState.CAPTURING
                 }
             }
         }
 
         return true
+    }
+
+    private suspend fun processAudio(samples: FloatArray) {
+        // Step 1: ASR (Japanese speech to text)
+        _state.value = PipelineState.PROCESSING_ASR
+        val whisperResult = whisperEngine?.transcribe(samples)
+        val japaneseText = whisperResult?.text?.trim()
+
+        if (japaneseText.isNullOrBlank()) {
+            _state.value = PipelineState.CAPTURING
+            return
+        }
+
+        Log.d(TAG, "ASR: $japaneseText")
+
+        // Step 2: Translation (Japanese to Chinese)
+        _state.value = PipelineState.PROCESSING_TRANSLATION
+        val translationResult = translator?.translate(japaneseText)
+        val displayText = translationResult?.translatedText ?: japaneseText
+
+        Log.d(TAG, "Translation: $displayText")
+
+        // Save to database (fire and forget)
+        val repo = repository
+        val sid = sessionId
+        if (repo != null) {
+            scope.launch {
+                repo.insert(
+                    SubtitleEntry(
+                        sourceText = japaneseText,
+                        translatedText = displayText,
+                        sessionId = sid
+                    )
+                )
+            }
+        }
+
+        // Step 3: Display on overlay
+        _state.value = PipelineState.DISPLAYING
+        _subtitleText.value = displayText
+        withContext(Dispatchers.Main) {
+            overlayManager?.updateText(displayText)
+        }
+
+        _state.value = PipelineState.CAPTURING
     }
 
     fun stop() {

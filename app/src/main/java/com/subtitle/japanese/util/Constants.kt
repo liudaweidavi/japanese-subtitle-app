@@ -10,9 +10,9 @@ object Constants {
     const val SAMPLE_RATE = 16000
     const val AUDIO_CHANNEL_COUNT = 1
     const val AUDIO_ENCODING = android.media.AudioFormat.ENCODING_PCM_16BIT
-    const val WINDOW_SIZE_MS = 5000L
-    const val OVERLAP_SIZE_MS = 1000L
-    const val CHUNK_INTERVAL_MS = 3000L
+    const val WINDOW_SIZE_MS = 3000L
+    const val OVERLAP_SIZE_MS = 500L
+    const val CHUNK_INTERVAL_MS = 2500L
 
     // Whisper
     const val WHISPER_LANGUAGE = "ja"

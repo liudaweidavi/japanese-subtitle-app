@@ -48,7 +48,7 @@ class AudioBuffer(
         val startIdx = totalSamplesWritten - windowSamples
 
         for (i in 0 until windowSamples) {
-            val bufIdx = (startIdx + i) % buffer.size
+            val bufIdx = ((startIdx + i) % buffer.size + buffer.size) % buffer.size
             result[i] = buffer[bufIdx] / 32768.0f
         }
 
